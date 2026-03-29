@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generatore Email Transfer</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; padding: 20px; max-width: 500px; margin: auto; }
+        /* Font-size a 16px evita lo zoom automatico fastidioso su iPhone */
+        input, button { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; box-sizing: border-box;}
+        button { background-color: #007AFF; color: white; font-weight: bold; cursor: pointer; border: none; margin-top: 15px; }
+    </style>
+</head>
+<body>
+    <h2>Dati Transfer</h2>
+    <input type="text" id="start" placeholder="Origine">
+    <input type="text" id="dest" placeholder="Destinazione">
+    <input type="date" id="day">
+    <input type="time" id="time">
+    <input type="text" id="flight" placeholder="Volo">
+    
+    <button onclick="generateMail()">Genera Email</button>
+
+    <script>
+        function generateMail() {
+            const start = document.getElementById('start').value || '_StartingPlace';
+            const dest = document.getElementById('dest').value || '_DestinationPlace';
+            const day = document.getElementById('day').value || '_Day';
+            const time = document.getElementById('time').value || '_Time';
+            const flight = document.getElementById('flight').value || '_Flight';
+
+            const subject = `TRANSFER ARCIELLO ${start} - ${dest} - ${day}`;
+            
+            // Uso il classico \n per gli a capo, che encodeURIComponent convertirà in %0A
+            const body = `Salve,\n\nDovrei organizzare quanto segue:\nOrigine : ${start}\nDestinazione: ${dest}\nGiorno: ${day}\nOra: ${time}\nVolo: ${flight}\nPagamento: Fattura\n\nSaluti`;
+
+            const mailtoUrl = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            
+            // METODO SICURO PER iOS: Creo un link invisibile e lo clicco tramite codice
+            const tempLink = document.createElement('a');
+            tempLink.href = mailtoUrl;
+            document.body.appendChild(tempLink); // Lo aggiungo alla pagina
+            tempLink.click();                    // Lo clicco automaticamente
+            document.body.removeChild(tempLink); // Lo rimuovo subito dopo
+        }
+    </script>
+</body>
+</html>
